@@ -1,0 +1,204 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EmployeeController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.salama.company.Multinational.Company.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeController (com.salama.company.Multinational.Company.controllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeController</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EmployeeController$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.salama.company.Multinational.Company.controllers;
+&nbsp;
+&nbsp;
+&nbsp;import com.salama.company.Multinational.Company.dtos.EmployeeDto;
+&nbsp;import com.salama.company.Multinational.Company.dtos.EmployeeRequestBody;
+&nbsp;import com.salama.company.Multinational.Company.entities.Address;
+&nbsp;import com.salama.company.Multinational.Company.entities.Employee;
+&nbsp;import com.salama.company.Multinational.Company.entities.Passport;
+&nbsp;import com.salama.company.Multinational.Company.entities.Skill;
+&nbsp;import com.salama.company.Multinational.Company.entities.base.BaseResponse;
+&nbsp;import com.salama.company.Multinational.Company.services.EmployeesService;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import jakarta.validation.constraints.Min;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.validation.annotation.Validated;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;api/v1/employees&quot;)
+&nbsp;@Validated
+&nbsp;public class EmployeeController {
+&nbsp;
+&nbsp;
+&nbsp;    private final EmployeesService employeesService;
+&nbsp;
+&nbsp;    @Autowired
+<b class="fc">&nbsp;    public EmployeeController(EmployeesService employeesService) {</b>
+<b class="fc">&nbsp;        this.employeesService = employeesService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping
+&nbsp;    public List&lt;EmployeeDto&gt; getAllEmployees() {
+<b class="nc">&nbsp;        return employeesService.getAllEmployees();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping
+&nbsp;    public void saveNewEmployee(@RequestBody @Valid EmployeeDto employee) {
+<b class="nc">&nbsp;        employeesService.saveNewEmployee(employee);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(path = &quot;{employeeId}&quot;)
+&nbsp;    public void updateEmployee(
+&nbsp;            @PathVariable(&quot;employeeId&quot;) Long employeeId,
+&nbsp;            @RequestParam(required = false) @Valid String name,
+&nbsp;            @RequestParam(required = false) @Valid String email
+&nbsp;    ) {
+<b class="nc">&nbsp;        employeesService.updateEmployee(employeeId, name, email);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(path = &quot;/update-fields/{employeeId}&quot;)
+&nbsp;    public void updateEmployeeFields(
+&nbsp;            @PathVariable(&quot;employeeId&quot;) Long employeeId,
+&nbsp;            @RequestBody EmployeeRequestBody employeeRequestBody
+&nbsp;    ) {
+<b class="nc">&nbsp;        employeesService.updateEmployeeFields(employeeId, employeeRequestBody);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(path = &quot;{employeeId}&quot;)
+&nbsp;    public void deleteEmployee(@PathVariable(&quot;employeeId&quot;) Long employeeId) {
+<b class="nc">&nbsp;        employeesService.deleteEmployee(employeeId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(value = &quot;/insert-passport/{employeeId}&quot;)
+&nbsp;    public void insertPassport(
+&nbsp;            @PathVariable(&quot;employeeId&quot;) Long employeeId,
+&nbsp;            @Valid @RequestBody Passport passport
+&nbsp;    ) {
+<b class="nc">&nbsp;        employeesService.insertPassport(employeeId, passport);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(value = &quot;/add-skill/{employeeId}&quot;)
+&nbsp;    public void addSkill(
+&nbsp;            @PathVariable(&quot;employeeId&quot;) @Min(5) Long employeeId,
+&nbsp;            @RequestBody Skill skill
+&nbsp;    ) {
+<b class="nc">&nbsp;        employeesService.addSkillToEmployee(employeeId, skill);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(value = &quot;/add-address/{employeeId}&quot;)
+&nbsp;    public void addAddress(
+&nbsp;            @PathVariable(&quot;employeeId&quot;) Long employeeId,
+&nbsp;            @RequestBody Address address
+&nbsp;    ) {
+<b class="nc">&nbsp;        employeesService.addAddressToEmployee(employeeId, address);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-11-27 20:58</div>
+</div>
+</body>
+</html>

@@ -95,6 +95,12 @@ public class Employee extends BaseEntity implements UserDetails {
         this.department = department;
     }
 
+    public Employee(String name, int age, float salary, String email) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+
     public Long getId() {
         return id;
     }

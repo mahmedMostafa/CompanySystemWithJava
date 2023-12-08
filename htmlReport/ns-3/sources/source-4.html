@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SkillController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.salama.company.Multinational.Company.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: SkillController (com.salama.company.Multinational.Company.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SkillController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (2/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.salama.company.Multinational.Company.controllers;
+&nbsp;
+&nbsp;
+&nbsp;import com.salama.company.Multinational.Company.entities.Skill;
+&nbsp;import com.salama.company.Multinational.Company.entities.base.BaseResponse;
+&nbsp;import com.salama.company.Multinational.Company.services.SkillsService;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;api/v1/skills&quot;)
+&nbsp;public class SkillController {
+&nbsp;
+&nbsp;    private final SkillsService skillsService;
+&nbsp;
+&nbsp;    @Autowired
+<b class="fc">&nbsp;    public SkillController(SkillsService skillsService) {</b>
+<b class="fc">&nbsp;        this.skillsService = skillsService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping
+&nbsp;    public List&lt;Skill&gt; getAllSkills() {
+<b class="nc">&nbsp;        return skillsService.getAllSkills();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping
+&nbsp;    public void saveNewSkill(@RequestBody Skill skill) {
+<b class="nc">&nbsp;        skillsService.saveNewSkill(skill);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(path = &quot;{skillId}&quot;)
+&nbsp;    public void deleteSkill(@PathVariable(&quot;skillId&quot;) Long skillId) {
+<b class="nc">&nbsp;        skillsService.removeSkill(skillId);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-11-27 20:58</div>
+</div>
+</body>
+</html>

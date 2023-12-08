@@ -51,7 +51,7 @@ public class EmployeesService {
         return employeesRepository.findById(id);
     }
 
-    public void saveNewEmployee(EmployeeDto employeeDto) {
+    public Employee saveNewEmployee(EmployeeDto employeeDto) {
         Optional<Employee> employeeOptional = employeesRepository.findEmployeeByEmail(employeeDto.email());
         if (employeeOptional.isPresent()) {
             throw new EmailAlreadyTakenException();
@@ -65,7 +65,7 @@ public class EmployeesService {
                 null,
                 employeeDto.department()
         );
-        employeesRepository.save(employee);
+        return employeesRepository.save(employee);
     }
 
     public void deleteEmployee(Long employeeId) {
