@@ -13,7 +13,6 @@ import java.util.Set;
 @Entity
 public class Skill {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long skillId;
@@ -25,6 +24,7 @@ public class Skill {
     @JsonProperty("skill_level")
     private SkillLevel skillLevel;
 
+    //this is the inverse end of the relationship
     @ManyToMany(mappedBy = "skills")
     @JsonIgnore
     private Set<Employee> employees = new HashSet<>();
@@ -73,6 +73,18 @@ public class Skill {
 
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
+    }
+
+    //because the employee is the owner of this relationship
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        employee.getSkills().add(this);
+    }
+
+    //because the employee is the owner of this relationship
+    public void removeEmployee(Employee employee) {
+        this.employees.remove(employee);
+        employee.getSkills().remove(this);
     }
 
     @Override

@@ -57,8 +57,10 @@ public class Employee extends BaseEntity implements UserDetails {
     @JsonBackReference
     private List<Employee> managees;
 
+    //The Employee is the owner of this relationship
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "passport_id", referencedColumnName = "id", unique = true)
+    //unique is important here to complete the mapping
     private Passport passport;
 
     @Fetch(FetchMode.JOIN)
@@ -81,6 +83,17 @@ public class Employee extends BaseEntity implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "address_id", referencedColumnName = "addressId")}
     )
     private Set<Address> addresses = new HashSet<>();
+
+    /*
+     * This will create a separate table to store the employee nicknames with a table name of employee_nicknames
+     * the nickname field will be the column name, the joined column will be the employee_id which references the id
+     * the employee_id is a composite of the employee id and the nickname itself
+     * we could also use it with embeddable classes
+     */
+    @ElementCollection
+    @CollectionTable(name = "employee_nicknames", joinColumns = @JoinColumn(name = "employee_id"))
+    @Column(name = "nickname")
+    private Collection<String> nicknames = new ArrayList<>();
 
     public Employee() {
     }
@@ -190,6 +203,14 @@ public class Employee extends BaseEntity implements UserDetails {
         this.managees = managees;
     }
 
+    public Collection<String> getNicknames() {
+        return nicknames;
+    }
+
+    public void setNicknames(Collection<String> nicknames) {
+        this.nicknames = nicknames;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -245,21 +266,30 @@ public class Employee extends BaseEntity implements UserDetails {
                 ", age=" + age +
                 ", salary=" + salary +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", manager=" + manager +
+                ", managees=" + managees +
                 ", passport=" + passport +
-                ", departmentId=" + department +
+                ", department=" + department +
+                ", skills=" + skills +
+                ", addresses=" + addresses +
+                ", nicknames=" + nicknames +
                 '}';
     }
 
+
+    //since this is an entity, we only care about the id for two entities to be equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return age == employee.age && Float.compare(salary, employee.salary) == 0 && Objects.equals(id, employee.id) && Objects.equals(name, employee.name) && Objects.equals(email, employee.email) && Objects.equals(department, employee.department);
+        return Objects.equals(id, employee.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, salary, email, department);
+        return Objects.hash(id);
     }
 }

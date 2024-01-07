@@ -20,7 +20,12 @@ public class Address extends BaseEntity {
     private Set<Employee> employees;
 
     public Address() {
+    }
 
+    //because the employee is the owner of this relationship
+    public void addEmployee(Employee employee){
+        this.employees.add(employee);
+        employee.getAddresses().add(this);
     }
 
     public Long getAddressId() {

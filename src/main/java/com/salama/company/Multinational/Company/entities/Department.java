@@ -55,6 +55,10 @@ public class Department {
         this.employees = employees;
     }
 
+    /**
+     * We need to set the department to the employee because the employee is the owner of this relationship
+     * @param employee the employee we want to associate this department with
+     */
     public void addEmployee(Employee employee) {
         employees.add(employee);
         employee.setDepartment(this);
