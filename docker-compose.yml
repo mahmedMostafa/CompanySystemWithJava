@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.27
+    environment:
+      DATABASE_HOST: docker-mysql
+      DATABASE_PORT: 3306
+      MYSQL_DATABASE: companysystemdatabase
+      MYSQL_PASSWORD: 0126754654
+      MYSQL_ROOT_PASSWORD: root
+
+  app:
+    image: companysystem:latest
+    ports:
+      - "8000:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/company_database?useSSL=false&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 0126754654
+    depends_on:
+      - db
