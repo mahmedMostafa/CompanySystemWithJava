@@ -3,13 +3,11 @@ package com.salama.company.Multinational.Company.controllers;
 
 import com.salama.company.Multinational.Company.dtos.EmployeeDto;
 import com.salama.company.Multinational.Company.dtos.EmployeeRequestBody;
+import com.salama.company.Multinational.Company.dtos.SkillRequest;
 import com.salama.company.Multinational.Company.entities.Address;
-import com.salama.company.Multinational.Company.entities.Employee;
 import com.salama.company.Multinational.Company.entities.Passport;
-import com.salama.company.Multinational.Company.entities.Skill;
 import com.salama.company.Multinational.Company.services.EmployeesService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,8 +71,8 @@ public class EmployeeController {
 
     @PutMapping(value = "/add-skill/{employeeId}")
     public void addSkill(
-            @PathVariable("employeeId") @Min(5) Long employeeId,
-            @RequestBody Skill skill
+            @PathVariable("employeeId") Long employeeId,
+            @RequestBody @Valid SkillRequest skill
     ) {
         employeesService.addSkillToEmployee(employeeId, skill);
     }

@@ -1,18 +1,16 @@
 package com.salama.company.Multinational.Company.errors;
 
 
+import com.salama.company.Multinational.Company.entities.enums.SkillLevel;
 import com.salama.company.Multinational.Company.errors.exceptions.EmailAlreadyTakenException;
 import com.salama.company.Multinational.Company.errors.exceptions.EmployeeNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class DefaultExceptionHandler {
@@ -114,6 +112,48 @@ public class DefaultExceptionHandler {
     }
 
     /**
+     * called when a validation fails for request params or path params
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiError> handleException(IllegalStateException exception, HttpServletRequest request) {
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                null
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
+     * called when some wrong value passed for an argument (this is not validation)
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleException(IllegalArgumentException exception, HttpServletRequest request) {
+
+        String errorMessage = exception.getMessage();
+        if (errorMessage.contains("SkillLevel")) {
+            errorMessage = "The Skill level isn't valid, please provide one of these values "
+                    + Arrays.stream(SkillLevel.values()).map(String::valueOf).collect(Collectors.joining("-"));
+        }
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                errorMessage,
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                null
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+
+    /**
      * This is triggered when we pass wrong data when we do some validation in the controller or when we try to
      * insert new data into the table and the validation fails
      */
@@ -137,18 +177,18 @@ public class DefaultExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
-//
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiError> handleException(Exception exception, HttpServletRequest request) {
-//
-//        ApiError apiError = new ApiError(
-//                request.getRequestURI(),
-//                "YOU FUCKED UP",
-//                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-//                LocalDateTime.now(),
-//                Arrays.toString(exception.getStackTrace())
-//        );
-//
-//        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleException(Exception exception, HttpServletRequest request) {
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                "YOU FUCKED UP",
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now(),
+                Arrays.toString(exception.getStackTrace())
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

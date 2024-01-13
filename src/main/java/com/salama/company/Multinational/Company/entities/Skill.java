@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.salama.company.Multinational.Company.entities.enums.SkillLevel;
 import jakarta.persistence.*;
+import org.yaml.snakeyaml.util.EnumUtils;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

@@ -1,10 +1,14 @@
 package com.salama.company.Multinational.Company.controllers;
 
 
+import com.salama.company.Multinational.Company.dtos.SkillRequest;
 import com.salama.company.Multinational.Company.entities.Skill;
 import com.salama.company.Multinational.Company.entities.base.BaseResponse;
+import com.salama.company.Multinational.Company.entities.enums.SkillLevel;
 import com.salama.company.Multinational.Company.services.SkillsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +30,7 @@ public class SkillController {
     }
 
     @PostMapping
-    public void saveNewSkill(@RequestBody Skill skill) {
+    public void saveNewSkill(@RequestBody @Valid SkillRequest skill) {
         skillsService.saveNewSkill(skill);
     }
 

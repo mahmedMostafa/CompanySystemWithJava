@@ -3,10 +3,12 @@ package com.salama.company.Multinational.Company.services;
 
 import com.salama.company.Multinational.Company.dtos.EmployeeDto;
 import com.salama.company.Multinational.Company.dtos.EmployeeRequestBody;
+import com.salama.company.Multinational.Company.dtos.SkillRequest;
 import com.salama.company.Multinational.Company.entities.Address;
 import com.salama.company.Multinational.Company.entities.Employee;
 import com.salama.company.Multinational.Company.entities.Passport;
 import com.salama.company.Multinational.Company.entities.Skill;
+import com.salama.company.Multinational.Company.entities.enums.SkillLevel;
 import com.salama.company.Multinational.Company.errors.exceptions.EmailAlreadyTakenException;
 import com.salama.company.Multinational.Company.errors.exceptions.EmployeeNotFoundException;
 import com.salama.company.Multinational.Company.mappers.EmployeeDtoMapper;
@@ -128,17 +130,13 @@ public class EmployeesService {
     }
 
     @Transactional
-    public void addSkillToEmployee(Long employeeId, Skill skill) {
+    public void addSkillToEmployee(Long employeeId, SkillRequest skill) {
         Employee employee = employeesRepository.findById(employeeId)
                 .orElseThrow(EmployeeNotFoundException::new);
 
-        if (skill == null || skill.getName() == null) {
-            throw new IllegalStateException("Please insert valid data");
-        }
-
         //if the skill exists add it, if not then create a new one and add it
-        Optional<Skill> skillOptional = skillRepository.findSkillByName(skill.getName());
-        Skill savedSkill = skillOptional.orElseGet(() -> new Skill(skill.getName(), skill.getSkillLevel()));
+        Optional<Skill> skillOptional = skillRepository.findSkillByName(skill.name());
+        Skill savedSkill = skillOptional.orElseGet(() -> new Skill(skill.name(), SkillLevel.valueOf(skill.skillLevel())));
 
         //update skills
         employee.getSkills().add(savedSkill);

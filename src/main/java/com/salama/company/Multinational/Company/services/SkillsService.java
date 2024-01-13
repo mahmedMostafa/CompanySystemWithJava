@@ -1,13 +1,18 @@
 package com.salama.company.Multinational.Company.services;
 
 
+import com.salama.company.Multinational.Company.dtos.SkillRequest;
 import com.salama.company.Multinational.Company.entities.Skill;
+import com.salama.company.Multinational.Company.entities.enums.SkillLevel;
 import com.salama.company.Multinational.Company.repositories.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillsService {
@@ -23,12 +28,19 @@ public class SkillsService {
         return skillRepository.findAll();
     }
 
-    public void saveNewSkill(Skill skill) {
-        Optional<Skill> optionalSkill = skillRepository.findSkillByName(skill.getName());
+    public void saveNewSkill(SkillRequest skill) {
+        Optional<Skill> optionalSkill = skillRepository.findSkillByName(skill.name());
         if (optionalSkill.isPresent()) {
             throw new IllegalStateException("This skill already exists");
         }
-        skillRepository.save(skill);
+//        try {
+        var skillLevel = SkillLevel.valueOf(skill.skillLevel());
+        skillRepository.save(new Skill(skill.name(), skillLevel));
+//        } catch (IllegalArgumentException exception) {
+//            //Enum value isn't correct
+//            throw new IllegalArgumentException("The Skill level isn't valid, please provide one of these values "
+//                    + Arrays.stream(SkillLevel.values()).map(String::valueOf).collect(Collectors.joining("-")));
+//        }
     }
 
     public void removeSkill(Long skillId) {
