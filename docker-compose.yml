@@ -1,22 +1,42 @@
 version: '3.8'
 
 services:
+
+  app:
+    image: companysystem:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "35729:35729"
+      - "5005:5005"
+    volumes:
+      - ./:/app
+      - ./.m2:/root/.m2
+    working_dir: /app
+    command: sh run.sh
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/companysystemdatabase?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVER_PORT:
+#      _JAVA_OPTIONS:
+#          -Xdebug
+#          -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    depends_on:
+      - db
+
   db:
     image: mysql:8.0.27
     environment:
       DATABASE_HOST: docker-mysql
       DATABASE_PORT: 3306
       MYSQL_DATABASE: companysystemdatabase
-      MYSQL_PASSWORD: 0126754654
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+    volumes:
+      - ~/apps/mysql:/var/lib/mysql
 
-  app:
-    image: companysystem:latest
-    ports:
-      - "8000:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/company_database?useSSL=false&createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 0126754654
-    depends_on:
-      - db
+
